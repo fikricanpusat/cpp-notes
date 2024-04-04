@@ -2,7 +2,7 @@
 CXX := g++
 
 # Compiler flags
-CXXFLAGS := -std=c++17 -Wall -Wextra
+CXXFLAGS := -std=c++17
 
 # Target executable
 TARGET := cpp-notes.bin

@@ -1,6 +1,6 @@
 /* ==============================================================================
 
-Lecture 01
+L01
 
 INTRODUCTION TO C++
 
@@ -228,8 +228,8 @@ e.g.
 * Accessing memory after it has been deallocated (a dangling pointer).
 * Dividing by zero.
 * Using a non-constant expression in a case label in a switch statement in C++.
-* Changing a const variable in C.
-e.g. An interesting undefined behavior that is encountered a lot
+* Changing a const variable in C. Changing a string literal in C and C++.
+e.g. An interesting undefined behavior that is encountered a lot:
 ---------------------------
 char *p = "temp";
 *p = 'k'; // Changing a string literal is ub.
