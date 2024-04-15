@@ -129,6 +129,54 @@ void func(void)
 {
 ---------------------------
 
+SCOPE
+
+https://en.cppreference.com/w/cpp/language/scope
+
+All names has a scope in C++. If there is an identifier (not necessarily a variable), it has a scope. Scope is a code
+chunk that an identifier is known/accessible. The terms "scope" and "name lookup" are embedded together.
+
+In C, there are 4 scope categories: file, function, block, function prototype.
+e.g. Scope categories.
+---------------------------
+void func(int x);	// x has function prototype scope
+int y = 10;	//		// y has file scope
+void func(int z)	// z has block scope
+{
+	int t = 20;		// t has block scope
+	...
+out:				// Function scope (In function before or after declaration. Only good for labels generally)
+	...
+}
+---------------------------
+
+In C++, things are a little different. There are these scope types: Namespace, class, block, function prototype,
+function.
+
+Note: There is an operator in C++ that is not in C. It is the scope resolution operator. It forces compiler to
+do the name lookup on namespace scope.
+e.g.
+---------------------------
+int x = 10;
+void func(void)
+{
+	int x = 20;
+	::x += x;	// Add local x to global x and assign to global x. "::x" is is looked up in namespace scope.
+}
+---------------------------
+
+Best Practice: Legal, but never let an inner scope name shadow (name hiding, name shadowing) the outer scope one.
+e.g.
+---------------------------
+voud func(void)
+{
+	int x = 10;
+	if (x > 10) {
+		int x = 56;
+		...
+	}
+}
+---------------------------
 
 ============================================================================== */
 
