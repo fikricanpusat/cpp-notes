@@ -48,8 +48,8 @@ Default init rules are the same in both C and C++ and depends on the storage cla
 * Zero initialization is performed automatically by the compiler when static storage variables are default initialized:
 e.g. Below is an example of zero initialization happening for default initialization.
 --------------------------- */
-int x;
-void print_zero_init(void)
+static int x;
+static void print_zero_init(void)
 {
 	static int y;
 	STARTF();
@@ -61,7 +61,7 @@ void print_zero_init(void)
 * Automatic storage variables are initialized with indetermined (garbage) value when default initialized.
 e.g. Using garbage value is undefined behavior.
 --------------------------- */
-void print_garbage_init(void)
+static void print_garbage_init(void)
 {
 	int x;
 	STARTF();

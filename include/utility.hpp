@@ -6,7 +6,7 @@
 #define STARTT() \
 	do { \
 		std::cout << "\033[1;34m" << "File: " << __FILE__ << std::endl << \
-		"======== START ========" << "\033[0m" << std::endl; \
+		"======== START ========\n" << "\033[0m" << std::endl; \
 	} while(0)
 
 #define ENDT() \

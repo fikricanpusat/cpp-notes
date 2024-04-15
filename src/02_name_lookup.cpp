@@ -23,8 +23,8 @@ token. The rules of name lookup follows:
 1. Name lookup happens in a predetermined order in increasingly larger blocks
 e.g.
 --------------------------- */
-int inc_x = 5;
-void increasing_block_name_lookup(void)
+static int inc_x = 5;
+static void increasing_block_name_lookup(void)
 {
 	STARTF();
 	std::cout << inc_x << std::endl;
@@ -53,7 +53,7 @@ int main() {
 ---------------------------
 e.g. An interesting name lookup example.
 --------------------------- */
-void interesting_name_lookup(void)
+static void interesting_name_lookup(void)
 {
 	STARTF();
 	int printf = 5;
