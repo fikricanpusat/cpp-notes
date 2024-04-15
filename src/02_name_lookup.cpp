@@ -2,8 +2,6 @@
 
 /* ==============================================================================
 
-L02
-
 NAME LOOKUP
 
 Smallest piece of word that compiler can read and understand is called "token". The process of dividing code
