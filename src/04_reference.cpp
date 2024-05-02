@@ -40,7 +40,7 @@ static void reference_init()
 }
 /* ---------------------------
 
-Remember: const objects also cannot be default initialized.
+References cannot be default initialized. Rembember that const objects also cannot be default initialized.
 
 Note: "https://godbolt.org/" is a website that can turn C and C++ codes into assembly codes as lots of compilers do.
 
@@ -177,6 +177,71 @@ void func(void)
 }
 ---------------------------
 
+e.g. Below is undefined behaviour.
+---------------------------
+static void func_(int &r)
+{
+	r = 30;
+}
+
+static void func(void)
+{
+	const int temp = 5;
+	func_((int &)temp);
+	...
+}
+---------------------------
+
+e.g. An interesting case. You can do below to initialize references to consts. The temp_val has automatic lifetime.
+---------------------------
+static void func(void)
+{
+	double dval = 1.2;
+	int& r1 = dval;			// Syntax error due to type mismatch
+	int& r2 = 10;			// Syntax error due to 10 being prvalue while r2 is lvalue reference
+	const int& r1 = dval;	// Valid
+		// seudo code, whats happening behind the scenes
+		// int temp_val{dval};
+		// const int &r = temp_val;
+	const int& r2 = 10;		// Valid
+		// seudo code, whats happening behind the scenes
+		// int temp_val{10};
+		// const int &r = temp_val;
+}
+--------------------------- */
+static void reference_to_const_initialize(void)
+{
+	STARTF();
+	unsigned long x = 10;
+	const long& r1 = x; // r1 is reference to the midway temp variable not x.
+	const int& r2 = x; // r2 is reference to the midway temp variable not x.
+	++x;
+
+	std::cout << "x : " << x << std::endl;
+	std::cout << "r1: " << r1 << std::endl;
+	std::cout << "r2: " << r2 << std::endl;
+	ENDF();
+}
+/* ---------------------------
+void func1(T &); // You can only call func1 with lvalue expression.
+void func2(const T &); // You can call func2 both with lvalue and rvalue expressions.
+---------------------------
+
+Differences between pointer and reference semantics:
+
+* Pointers can be default initialized while references cannot.
+* Pointers can point to different objects throughout their lifetime while references can only refer to the
+	same object. References are not rebindable.
+* There is null pointer while there is no null reference.
+* There is ptr to ptr while there is no ref to ref (other than type deduction that we will learn).
+
+Note: C++ Core Guidelines are developed by Bjarne and Herb Sutter, and tries to set some best practices for C++
+https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+
+cppcon is the greatest C++ Conference. It is a great way to learn more about C++.
+
+01:25:30
+
 ============================================================================== */
 
 void reference_semantics(void)
@@ -185,5 +250,6 @@ void reference_semantics(void)
 	reference_init();
 	swap_cmp();
 	return_ref_from_func();
+	reference_to_const_initialize();
 	ENDT();
 }
