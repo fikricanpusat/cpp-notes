@@ -240,16 +240,36 @@ https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 
 cppcon is the greatest C++ Conference. It is a great way to learn more about C++.
 
-01:25:30
+Rvalue references are introduced with modern C++ and added specially for move semantics. Another reason is
+perfect forwarding. We will see it now for a while and explore it fully in move semantics topic.
+--------------------------- */
+static void rvalue_reference_example(void)
+{
+	STARTF();
+	int x = 10;
+	int &r1 = x;		// lvalue reference
+	// int &&y = x;		// rvalue reference, not valid because x is lvalue.
+	int &&z = x + 5;	// rvalue reference and should be assigned rvalue expression like this.
+	z; 					// z is rvalue reference but is a lvalue expression (simply because z is a variable name).
+	int &r2 = z;		// Then this is valid
+	std::cout << "r2: " << r2 << " z: " << z << std::endl;
+	r2 = 20;
+	std::cout << "r2: " << r2 << " z: " << z << std::endl;
+	ENDF();
+}
+/* ---------------------------
+
+If a function parameter is an rvalue reference, it is for sure about move semantics.
 
 ============================================================================== */
 
-void reference_semantics(void)
+void reference(void)
 {
 	STARTT();
 	reference_init();
 	swap_cmp();
 	return_ref_from_func();
 	reference_to_const_initialize();
+	rvalue_reference_example();
 	ENDT();
 }

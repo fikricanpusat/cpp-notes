@@ -178,7 +178,7 @@ voud func(void)
 
 ============================================================================== */
 
-void initialize_things(void)
+void initialize(void)
 {
 	STARTT();
 	print_zero_init();

@@ -1,6 +1,6 @@
 #ifndef INITIALIZE_HPP
 #define INITIALIZE_HPP
 
-void initialize_things(void);
+void initialize(void);
 
 #endif /* INITIALIZE_HPP */
