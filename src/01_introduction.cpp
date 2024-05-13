@@ -213,6 +213,7 @@ char str[4]= "umut"; // Valid in C, not allowed in C++.
 ---------------------------
 
 22. String literals are const char array in C++ while they are char array in C.
+Note that they are not char pointer but char array.
 ---------------------------
 "ali" // char [4] in C, const char [4] in C++
 ---------------------------

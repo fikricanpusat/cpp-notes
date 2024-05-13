@@ -171,7 +171,7 @@ e.g. Reference to an array
 ---------------------------
 void func(void)
 {
-	const int a[5] = { 0, 1, 2, 3, 4 };
+	int a[5] = { 0, 1, 2, 3, 4 };
 	int(&ra)[5] = a;
 	...
 }
