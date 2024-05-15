@@ -3,11 +3,11 @@
 INTRODUCTION TO C++
 
 C++ is designed and developed by Bjarne Stroustrup with name "C with classes". Currently it is maintained by the
-C++ Standards Committee under "isocpp.org". Bjarne Stroustrup is also a part of this committee. C++ is tandardized
+C++ Standards Committee under "isocpp.org". Bjarne Stroustrup is also a part of this committee. C++ is standardized
 first in 1998.
 
 In 2011, C++11 is introduced with drastic changes. New version is commonly called by "Modern C++". This is where
-the power of C++ lies in. C++14 is a minor change, C++17, and C++20 is another major changes. These notes are based
+the power of C++ lies in. C++14 is a minor change, C++17, and C++20 are other major changes. These notes are based
 on C++17.
 
 Best sources to learn C++ are C++ Primer (Stanley B. Lippman, Josee Lajoie, and Barbara Moo) and The C++ Standard
@@ -19,76 +19,80 @@ functions) with high degree of compatibility and portability.
 ============================================================================== */
 
 
-
 /* ==============================================================================
 DIFFERENCES BETWEEN C and C++ (C INSIDE C++)
 
-C inside C++ is not exactly matches with C Programming Language. Common parts slowly diverges more. So C++ does not
+C inside C++ does not exactly match with C Programming Language. Common parts slowly diverges more. So C++ does not
 contain all C Programming Language (generally C99) in itself (e.g., compound literals, variable length arrays). So,
 not all C programs compile smoothly with a C++ compiler. C is a minimalist language. The compilers are also minimal.
 In C, the type control is loose while in C++ type control is strict. This strict type control causes compiler errors
 for C programs that are tried to compiled with C++ compilers. Bjarne Stroustrup calls this C inside C++ "a better
 C".
 
-1. There is an ugly rule on C that is not loved by a lot called "implicit int". When type is not given, variables
-are cast as signed int. In below code, function return type is implicitly determined as int in C. This is not done
-in C++ and below code would not compile.
+* There is an ugly rule on C that is not loved by a lot called "implicit int". When type is not given, variables
+are cast as "signed int". In below code, function return type is implicitly determined as "int" in C. This is not done
+in C++ and below code would not compile. This implicit type also happens on declarations with specifiers.
 ---------------------------
-func()
+func() // Valid in C, not valid in C++
 {
+	const i = 0; // Valid in C, not valid in C++
 	return 1;
 }
 ---------------------------
 
-2. Implicit function declaration. causes a name lookup difference. Below code would compile with warning in C
-while it does not in C++. In C, declaration of this function is implicitly done.
+* Implicit function declaration causes a name lookup difference. Below code would compile with warning in C
+while it does not in C++. In C, declaration of this function is implicitly done as "int foo();".
 ---------------------------
-void func()
+void func(void)
 {
 	foo();
 }
 ---------------------------
 
-3. Old-style function definition. This does not compile for C++ while it compiles for C.
+* Old-style function definition. This does not compile for C++ while it compiles for C.
 ---------------------------
 int func(a, b, c)
-double b, c; // a is int
+double b, c; // a is implicitly int
 {
 	return 1;
 }
 ---------------------------
 
-4. Missing return value. This compiles but causes undefined behavior in C when return value is used but does not
-compile for C++.
+* Missing return value in a function compiles but causes undefined behavior in C when return value is used, since it
+simply returns garbage value. This does not compile for C++, it needs a return statement with a value. Only exception
+to this is the "main" function where the compiler puts an implicit "return 0" to the end of the function if not
+specifically written.
 ---------------------------
-int func(int x) { }
+int func(int x) { }			// Valid in C, not valid in C++.
+int func(int x) { return; }	// Valid in C, not valid in C++.
 ---------------------------
 
-5. Below two function declarations mean different things in C. It means I don't give parameter information for "func",
-while other means no parameter for this functuon for "foo". However, it means the same (no parameter) in C++.
+* Below two function declarations mean different things in C. It means I don't give parameter information for "func",
+while other means no parameter for this function for "foo". However, it means the same (no parameter) in C++.
 ---------------------------
-void func();
-void foo(void);
-
-int main()
+void func1();
+void func2(void);
+void func3(void)
 {
-	func(1, 2, 3);	// No compile error in C.
-	func(1, 2);		// No compile error in C.
-	foo(2, 5);		// Causes compile error in C.
+	func1(1, 2, 3);	// No compile error in C assuming it is defined somewhere as 3 parameters.
+	func1(1, 2);	// No compile error in C assuming it is defined somewhere as 3 parameters.
+	func2(2, 5);	// Causes compile error in C.
+	...
 }
 ---------------------------
 
-6. Before C99, variables should be defined before statements. After C99 and in C++, variables can be defined anywhere.
+* Before C99, variables should be defined before statements. After C99 and in C++, variables can be defined anywhere.
 ---------------------------
 int main()
 {
 	int x;
 	x = 10;
 	int y;
+	...
 }
 ---------------------------
 
-7. Defining variables in "for" loops was not a thing before C99. It is, and best practice, after C99 and C++.
+* Defining variables in "for" loops was not a thing before C99. It is, and best practice, after C99 and C++.
 int main()
 {
 	for (int i = 0; i < 10; i++){
@@ -96,7 +100,7 @@ int main()
 	}
 }
 
-8. Below compiles and valid in C but does not compile in C++.
+* Below compiles and valid in C but does not compile in C++.
 ---------------------------
 int main()
 {
@@ -104,28 +108,30 @@ int main()
 		int i = 20;
 		printf("%d", i);
 	}
+	...
 }
 ---------------------------
 
 Differences about Types:
 
-9. "_Bool" is a legit keyword and type in C99 while it is not in C++.
+* "_Bool" is a legit keyword and type in C99 while it is not in C++.
 
-10. "bool" is a macro in C99 under "stdbool.h". "bool, true, false" are all keywords and "bool" is guaranteed to be
+* "bool" is a macro in C99 under "stdbool.h". "bool, true, false" are all keywords and "bool" is guaranteed to be
 1 byte in size. There is implicit type conversion from other types to bool such as below in C++.
 ---------------------------
 void func(void)
 {
 	int x = 12;
 	bool b = x; // b would be 12 in C99, "true" in C++.
+	...
 }
 ---------------------------
 
-11. Character literals are "int" in C while "char" in C++;
+* Character literals are "int" in C while "char" in C++;
 
 Differences about implicit type conversions:
 
-12. In C there are implicit type conversions:
+* In C there are implicit type conversions:
 	a) between different address types
 	b) between arithmetic types and address types
 but these are not allowed in C++.
@@ -135,18 +141,20 @@ void func(void)
 	int x = 10;
 	int *p = x;		// Allowed with warning in C but not allowed in C++
 	char *p = &x;	// Allowed with warning in C but not allowed in C++
+	...
 }
 ---------------------------
 
-13. You should initialize a const variable in C++ while it is not a rule in C:
+* You should initialize a const variable in C++ while it is not a rule in C. However, it is ub if the variable
+has automatic lifetime since it will initialize with a garbage value.
 ---------------------------
 const int x; // Allowed in C but not allowed in C++
 ---------------------------
 
-14. In C, global const variables' linkage is external (meaning reachable from other source files). In C++, global
+* In C, global const variables' linkage is external (meaning reachable from other source files). In C++, global
 const variables have internal linkage automatically just like defined with "static" implicitly.
 
-15. In C the const variables that are initialized with a constant expressions cannot be used in places where constant
+* In C the const variables that are initialized with a constant expressions cannot be used in places where constant
 expression are needed (e.g., array sizes, switch case labels).
 ---------------------------
 void func(void)
@@ -156,14 +164,18 @@ void func(void)
 }
 ---------------------------
 
-16. Implicit type conversion from constant pointer type to pointer type is allowed while it is not allowed in C++.
+* Implicit type conversion from const pointer type to pointer type is allowed in C, while it is not allowed in C++.
+---------------------------
 void func(const int *p) {
 	int *ptr = p; // Allowed in C, not allowed in C++.
+	volatile int y = 50;
+	int *ptr = &y; // Also applies to volatile. Allowed in C, not allowed in C++.
 	//...
 }
 ---------------------------
 
-17. void* ==> int* is valid in C while does not compile in C++.
+* "void*" ==> "T*" implicit conversion is valid in C while does not compile in C++.
+No problem with "T*" ==> "void*" implicit conversion in both unless const. See below.
 ---------------------------
 void func(const int *p)
 {
@@ -174,7 +186,23 @@ void func(const int *p)
 }
 ---------------------------
 
-18. typedef is needed for C while it is not in C++.
+* In C, the address of a const or volatile object can be assigned to a pointer of type void. In C++, the address of an
+object defined with the const or volatile keyword cannot be assigned to a pointer of type void without a type
+conversion. Pointers of type void can hold addresses of any type. However, in C++, the address of an object defined
+with the const or volatile keyword cannot be assigned to a pointer of type void without a type conversion.
+---------------------------
+void func(void)
+{
+	void *vptr1, *vptr2;
+	const int x = 10;
+	volatile int v = 20;
+	vptr1 = &x;
+	vptr2 = &v;
+	...
+}
+---------------------------
+
+* typedef is needed for C while it is not in C++.
 ---------------------------
 struct Data {
 	int a, b, c;
@@ -195,30 +223,30 @@ void func(void)
 }
 ---------------------------
 
-19. Empty (no variable) struct is not allowed in C while it is in C++.
+* Empty (no variable) struct is not allowed in C while it is in C++.
 ---------------------------
 struct Data { };
 ---------------------------
 
-20. auto keyword gives a variable automatic lifespan while static makes it static. But auto is not used that much
+* auto keyword gives a variable automatic lifespan while static makes it static. But auto is not used that much
 anymore since not using it defaults to auto. In C++ auto is completely different keyword. Used for type deduction.
 ---------------------------
 auto int x = 20;	// Valid in C, not valid in C++
 auto x = 20;		// Valid in C++, not valid in C
 ---------------------------
 
-21. A char array can be non null terminated in C while it cannot in C++.
+* A char array can be non null terminated in C while it cannot in C++.
 ---------------------------
 char str[4]= "umut"; // Valid in C, not allowed in C++.
 ---------------------------
 
-22. String literals are const char array in C++ while they are char array in C.
+* String literals are const char array in C++ while they are char array in C.
 Note that they are not char pointer but char array.
 ---------------------------
 "ali" // char [4] in C, const char [4] in C++
 ---------------------------
 
-23. Enumeration types are really type "int" in background in C. However, C++ has underlying types for enumeration.
+* Enumeration types are really type "int" in background in C. However, C++ has underlying types for enumeration.
 You can change this default "int" underlying type. It is not guaranteed that "enum" types are actually "int" on
 background.
 e.g.
@@ -301,6 +329,7 @@ does not conform to the language specifications. In other words, the standard do
 behave in such cases. This can lead to unpredictable results that may vary depending on the compiler, platform,
 optimization settings, and other factors.
 e.g.
+* Overflow in signed types.
 * Dereferencing a null pointer.
 * Accessing an array beyond its bounds.
 * Modifying a variable more than once between two sequence points in C.
@@ -318,8 +347,7 @@ char *p = "temp";
 *p = 'k'; // Changing a string literal is ub.
 ---------------------------
 
-
-Note: Unspecified behaivours occur when developers use a functionality and compilers implement different
+Note: Unspecified behaviours occur when developers use a functionality and compilers implement different
 ways for this functionality choosing from multiple possible ways explained in language standards.
 e.g. char type can be unsigned or signed in different implementations.
 e.g. Different compilers keeps "ayse" in different or same address.
@@ -328,7 +356,27 @@ void func(void)
 {
 	const char *p1 = "ayse";
 	const char *p2 = "ayse";
-	(p1 == p2) ? printf("dogru\n") : printf("yanlis\n");
+	(p1 == p2) ? printf("yes\n") : printf("no\n");
+}
+---------------------------
+e.g. It depends on compiler which function runs first which would affect the result.
+---------------------------
+int g = 20;
+
+int foo(void)
+{
+    return g + 4;;
+}
+
+int bar(void)
+{
+    ++g;
+	return 5;
+}
+
+int main()
+{
+    int x = foo() + bar();
 }
 ---------------------------
 
