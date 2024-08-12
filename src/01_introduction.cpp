@@ -75,7 +75,7 @@ void func2(void);
 void func3(void)
 {
 	func1(1, 2, 3);	// No compile error in C assuming it is defined somewhere as 3 parameters.
-	func1(1, 2);	// No compile error in C assuming it is defined somewhere as 3 parameters.
+	func1(1, 2);	// No compile error in C assuming it is defined somewhere as 2 parameters.
 	func2(2, 5);	// Causes compile error in C.
 	...
 }
@@ -104,7 +104,7 @@ int main()
 ---------------------------
 int main()
 {
-	for (int i = 0; i < 10; i++){
+	for (int i = 0; i < 10; i++) {
 		int i = 20;
 		printf("%d", i);
 	}

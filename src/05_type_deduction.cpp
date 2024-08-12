@@ -70,7 +70,7 @@ void func(void)
 
 Why AAA?
 
-1. Types can get longer and longer such that a vector type that holds list iterators... Wrıtıng the type
+1. Types can get longer and longer such that a vector type that holds list iterators... Writing the type
 everytime is confusing and time consuming. Get rid of the verbosity.
 
 e.g. Look at the difference for this vector
@@ -116,7 +116,7 @@ void func(void)
 	int a[10]{};
 	auto x = a;			// x becomes "int*" since array decay happens before type deduction
 	const int b[10]{};
-	auto y = a;			// y becomes "const int*"
+	auto y = b;			// y becomes "const int*"
 	auto z = "Orkun";	// z is of type "const char *"
 	const int t = 10;
 	auto l = t;			// constness is dropped. l is of type "int"
