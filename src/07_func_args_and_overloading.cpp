@@ -168,7 +168,7 @@ void func(void)
 ---------------------------
 		c. Standard conversion (including implicit and narrowing conversions)
 			c.1. conversion
-			c.2. promotion (integral promotion)
+			c.2. promotion (integral promotion -> below int to int or float to double)
 			c.3. exact match (including array decay, const conversion, func to ptr conversion)
 ---------------------------
 void foo(long double);
@@ -182,11 +182,119 @@ void func(void)
 	foo('A')	// exact match
 	int a[] = {1, 2, 3, 4, 5, 6, 7};
 	foo(a);		// exact match
-	int x{ 12 };
+	int x{12};
 	func(&x);	// exact match
 	...
 }
 ---------------------------
+
+e.g. Some overloading rules
+---------------------------
+// Functions taking default arguments
+void foo1(int x, int y = 10);
+void foo1(int x);
+// Call by ref call by value ambiguity
+void foo2(int);
+void foo2(int &);
+// Const overloading - an important concept
+void foo3(int *ptr);
+void foo3(cosnt T *ptr);	// An important type of overloading
+
+void func(void)
+{
+	foo1(20);	// Ambiguity syntax error due to default arg
+	int x {};
+	foo2(x);	// Ambiguity syntax error due to call by ref/value
+	...
+}
+---------------------------
+
+e.g. An important concept of overloading is constant overloading
+--------------------------- */
+void overload_ptr(int *p)
+{
+	std::cout << "No const overload(\"void overload_ptr(int *p)\") is called." << std::endl;
+}
+
+void overload_ptr(const int *p)
+{
+	std::cout << "Const overload(\"void overload_ptr(const int *p)\") is called." << std::endl;
+}
+
+void const_overload_ptr_usage(void)
+{
+	STARTF();
+	const int x{10};
+	int y{10};
+
+	std::cout << "Argument is &x where x is init as \"const int x = 10;\"\t-> ";
+	overload_ptr(&x);	// Only viable function is below overload since there is no const T* -> T* conversion
+	std::cout << "Argument is &y where y is init with \"int y = 10;\"\t-> ";
+	overload_ptr(&y);	// Both are viable but best is exact match
+	ENDF();
+}
+/* ---------------------------
+
+e.g. Same applies to references too of course.
+--------------------------- */
+void overload_ref(int &) // Notice you don't have to name params in func def too. This rule is to create sign diffs
+{
+	std::cout << "\"void overload_ref(int &)\" is called." << std::endl;
+}
+
+void overload_ref(const int &)
+{
+	std::cout << "\"void overload_ref(const int &)\" is called." << std::endl;
+}
+
+void const_overload_ref_usage(void)
+{
+	STARTF();
+	const int x{10};
+	int y{10};
+
+	std::cout << "Argument is &x where x is init as \"const int x{10};\"\t-> ";
+	overload_ref(x); // Only viable function is below overload since there is no const T& -> T& conversion
+	std::cout << "Argument is &y where y is init with \"int y{10};\"\t-> ";
+	overload_ref(y); // Both are viable but best is exact match
+	ENDF();
+}
+/* ---------------------------
+
+e.g. Another important concept of overloading is right/left value overloading includinc const overloading.
+--------------------------- */
+void right_left_overload(int &)
+{
+	std::cout << "\"void right_left_overload(int &)\" is called." << std::endl;
+}
+
+void right_left_overload(const int &)
+{
+	std::cout << "\"void right_left_overload(const int &)\" is called." << std::endl;
+}
+
+void right_left_overload(int &&)
+{
+	std::cout << "\"void right_left_overload(int &&)\" is called." << std::endl;
+}
+
+void right_left_overload_usage(void)
+{
+	STARTF();
+	int x{14};
+	const int y{14};
+
+	std::cout << "Argument is x where x is init as \"int x{14};\"\t\t-> ";
+	right_left_overload(x); // First two are viable, best match is first due to const overloading rules.
+	std::cout << "Argument is y where y is init as \"const int y{14};\"\t-> ";
+	right_left_overload(y); // Only second is viable due to const overloading rules.
+	std::cout << "Argument is \"2\" which is an rvalue\t\t\t-> ";
+	right_left_overload(2); // Last two viable, best match last one. Second viable due to r/l overload rules
+	ENDF();
+}
+/* ---------------------------
+
+01:05:00
 
 ============================================================================== */
 
@@ -194,5 +302,8 @@ void func_args_and_overloading(void)
 {
 	STARTT();
 	default_arg_usage();
+	const_overload_ptr_usage();
+	const_overload_ref_usage();
+	right_left_overload_usage();
 	ENDT();
 }
